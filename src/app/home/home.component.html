@@ -1,7 +1,11 @@
-<ActionBar class="action-bar">
-    <Label class="action-bar-title" text="Home"></Label>
+<ActionBar title="SQL App">
+    <ActionItem text="Add" ios.position="right" (tap)="insert()"></ActionItem>
+    <ActionItem text="Refresh" ios.position="left" (tap)="fetch()"></ActionItem>
 </ActionBar>
-
-<GridLayout class="page">
-    <!-- Add your page content here -->
-</GridLayout>
+<StackLayout>
+    <ListView [items]="encounters">
+        <ng-template let-encounter="item">
+            <Label text="{{ encounter.id }} - {{ encounter.name }}"></Label>
+        </ng-template>
+    </ListView>
+</StackLayout>
