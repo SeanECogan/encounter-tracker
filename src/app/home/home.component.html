@@ -1,11 +1,16 @@
-<ActionBar title="SQL App">
+<ActionBar title="Encounters">
     <ActionItem text="Add" ios.position="right" (tap)="insert()"></ActionItem>
-    <ActionItem text="Refresh" ios.position="left" (tap)="fetch()"></ActionItem>
+    <ActionItem text="Reset App Data" ios.position="left" (tap)="reset()"></ActionItem>
 </ActionBar>
 <StackLayout>
-    <ListView [items]="encounters">
+    <ListView *ngIf="encounters && encounters.length > 0" [items]="encounters">
         <ng-template let-encounter="item">
-            <Label text="{{ encounter.id }} - {{ encounter.name }}"></Label>
+            <Label text="{{ encounter.id }} - {{ encounter.name }} - {{encounter.created}} - {{encounter.modified}}"></Label>
         </ng-template>
     </ListView>
+    <Label 
+        *ngIf="!encounters || encounters.length <= 0" 
+        text="You have no encounters."
+        horizontalAlignment="center"
+        marginTop="50"></Label>
 </StackLayout>

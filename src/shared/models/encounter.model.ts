@@ -1,5 +1,3 @@
-import { Entity } from "./entity.model";
-
 export class Encounter {
     
     /**
@@ -7,18 +5,18 @@ export class Encounter {
      */
     constructor(
         id: number,
-        name: string
+        name: string,
+        created: Date,
+        modified: Date
     ) {
         this.id = id;
         this.name = name;
-        this.created = new Date();
-        this.modified = new Date();
-        this.entities = new Array<Entity>();
+        this.created = created;
+        this.modified = modified;
     }
 
     id: number;
     name: string;
     created: Date;
     modified: Date;
-    entities: Entity[];
 }

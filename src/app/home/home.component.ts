@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Encounter } from "~/shared/models/encounter.model";
-var Sqlite = require("nativescript-sqlite");
+import { DatabaseService } from "../database/sqlite.service";
 
 @Component({
     selector: "Home",
@@ -8,45 +8,35 @@ var Sqlite = require("nativescript-sqlite");
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-
-    private database: any;
     public encounters: Array<Encounter>;
 
-    public constructor() {
+    public constructor(private database: DatabaseService) {
         this.encounters = [];
-        (new Sqlite("encounter-tracker")).then(db => {
-            db.execSQL("CREATE TABLE IF NOT EXISTS encounters (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, created DATETIME, modified DATETIME)").then(id => {
-                this.database = db;
-            }, error => {
-                console.log("CREATE TABLE ERROR", error);
-            });
-        }, error => {
-            console.log("OPEN DB ERROR", error);
-        });
+
+        this.database.initializeDatabase()
+            .subscribe(() => this.refresh());
     }
 
     public insert() {
-        this.database.execSQL("INSERT INTO encounters (name, created, modified) VALUES (?, ?, ?)", ["Encounter", new Date(), new Date()]).then(id => {
-            console.log("INSERT RESULT", id);
-            this.fetch();
-        }, error => {
-            console.log("INSERT ERROR", error);
-        });
+        this.database.insertEncounter(new Encounter(
+            this.encounters.length + 1,
+            `Encounter ${this.encounters.length + 1}`,
+            new Date(),
+            new Date()))
+            .subscribe(encounterId => this.refresh());
     }
 
-    public fetch() {
-        this.database.all("SELECT * FROM encounters").then(rows => {
-            this.encounters = [];
-            for(var row in rows) {
-                this.encounters.push(
-                    new Encounter(
-                        rows[row][0],
-                        rows[row][1]
-                    ));
-            }
-        }, error => {
-            console.log("SELECT ERROR", error);
-        });
+    public refresh() {
+        this.database.retrieveEncounters()
+            .subscribe(encounters => this.encounters = encounters);
+    }
+
+    public reset() {
+        this.database.deleteDatabase();
+        
+        this.database.initializeDatabase()
+            .subscribe(() => this.refresh());
+            
     }
 
     ngOnInit() {
