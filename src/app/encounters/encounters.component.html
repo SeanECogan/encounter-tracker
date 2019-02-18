@@ -1,16 +1,53 @@
 <ActionBar title="Encounters">
-    <ActionItem text="Add" ios.position="right" (tap)="navigateToAddEncounter()"></ActionItem>
-    <ActionItem text="Reset App Data" ios.position="left" (tap)="reset()"></ActionItem>
 </ActionBar>
 <StackLayout>
-    <ListView *ngIf="encounters && encounters.length > 0" [items]="encounters">
+    <DockLayout
+        stretchLastChild="false"
+        marginLeft="10"
+        marginRight="10"
+        marginTop="5"
+        marginBottom="5">
+        <Button 
+            dock="left"
+            text="Reset App Data" 
+            (tap)="reset()"></Button>
+        <Button 
+            dock="right"
+            text="Add" 
+            (tap)="navigateToAddEncounter()" ></Button>
+    </DockLayout>
+    <ListView
+        *ngIf="encounters && encounters.length > 0" 
+        [items]="encounters" 
+        borderTopWidth="1"
+        borderColor="gray">
         <ng-template let-encounter="item">
-            <Label text="{{ encounter.id }} - {{ encounter.name }} - {{encounter.created}} - {{encounter.modified}}"></Label>
+            <StackLayout
+                marginTop="10"
+                borderBottomWidth="1"
+                borderColor="gray"
+                padding="10"
+                paddingLeft="17">
+                <Label 
+                    fontSize="18" 
+                    fontWeight="bold"
+                    [text]="encounter.name"></Label>
+                <Label 
+                    fontSize="14" 
+                    text="{{ 'Last Updated: '+encounter.getModifiedDateString() }}"></Label>      
+            </StackLayout>
         </ng-template>
     </ListView>
     <Label 
         *ngIf="!encounters || encounters.length <= 0" 
-        text="You have no encounters."
+        text="You're not tracking any encounters."
         horizontalAlignment="center"
-        marginTop="50"></Label>
+        marginTop="50"
+        textAlignment="center"></Label>
+    <Label 
+        *ngIf="!encounters || encounters.length <= 0" 
+        text="How about adding one?"
+        horizontalAlignment="center"
+        textAlignment="center"></Label>
 </StackLayout>
+

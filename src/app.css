@@ -11,10 +11,11 @@ refer to http://docs.nativescript.org/ui/theme.
 */
 @import '~nativescript-theme-core/css/core.light.css';
 
-/*
-For example, the following CSS rule changes the font size of all UI
-components that have the btn class name.
-*/
-.btn {
-    font-size: 18;
+ActionBar {
+    background-color: #091b2c;
+    color: #fafcfe;
+}
+
+Button {
+    background-color: #d9d943;
 }

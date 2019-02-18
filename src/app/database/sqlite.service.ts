@@ -30,12 +30,16 @@ export class DatabaseService {
             for (var row in rows) {
                 encounters.push(
                     new Encounter(
-                        rows[row][0],
+                        +rows[row][0],
                         rows[row][1],
-                        rows[row][2],
-                        rows[row][3]
+                        new Date(rows[row][2]),
+                        new Date(rows[row][3])
                     ));
             }
+
+            encounters.sort((a: Encounter, b: Encounter) => {
+                return b.modified.getTime() - a.modified.getTime();
+            });
 
             return encounters;
         }, error => {

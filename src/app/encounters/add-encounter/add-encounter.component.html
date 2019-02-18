@@ -1,10 +1,22 @@
 <ActionBar title="Add Encounter">
     <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" (tap)="returnToEncounters()"></NavigationButton>
-    <ActionItem text="Add" ios.position="right" (tap)="addEncounter()"></ActionItem>
 </ActionBar>
 <StackLayout>
-    <Label 
-        text="This screen is to add an encounter."
-        horizontalAlignment="center"
-        marginTop="50"></Label>
+    <TextField 
+        class="input input-border"
+        [(ngModel)]="encounterName" 
+        hint="Encounter Name"
+        secure="false"
+        (returnPress)="addEncounter()"
+        autocorrect="true"
+        marginLeft="10"
+        marginRight="10"
+        marginTop="10"></TextField>
+    <Button
+        text="Add" 
+        (tap)="addEncounter()" 
+        isEnabled="{{ formIsValid() }}"
+        horizontalAlignment="right"
+        marginRight="10"
+        marginTop="10"></Button>
 </StackLayout>

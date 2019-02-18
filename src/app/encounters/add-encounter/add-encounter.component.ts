@@ -20,18 +20,37 @@ export class AddEncounterComponent implements OnInit {
 
 	}
 
+	public encounterName: string;
+
 	public returnToEncounters() {
 		this._routerExtensions.back();
 	}
+
+	public formIsValid(): boolean {
+		if (this.encounterName) {
+			return this.encounterName.trim() !== '';
+		} else {
+			return false;
+		}
+	}
 	
     public addEncounter() {
-		var currentTimestamp = new Date().getTime();
-
-        this._database.insertEncounter(new Encounter(
-            currentTimestamp,
-            `Encounter ${currentTimestamp}`,
-            new Date(),
-            new Date()))
-            .subscribe(encounterId => this.returnToEncounters());
+		if (!this.encounterName || 
+			this.encounterName.trim() === '') {
+				let options = {
+					title: "Your encounter needs a name!",
+					message: "Please enter a name for your encounter.",
+					okButtonText: "OK"
+				};
+				
+				alert(options);
+		} else {
+			this._database.insertEncounter(new Encounter(
+				0,
+				this.encounterName,
+				new Date(),
+				new Date()))
+				.subscribe(encounterId => this.returnToEncounters());
+		}
     }
 }
