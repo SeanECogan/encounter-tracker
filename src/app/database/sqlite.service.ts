@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Encounter } from '~/shared/models/encounter.model';
 import { Observable, from } from 'rxjs';
+import { Combatant } from '~/shared/models/combatant.model';
 var Sqlite = require('nativescript-sqlite');
 
 @Injectable()
@@ -88,6 +89,74 @@ export class DatabaseService {
                 return id;
             }, error => {
                 console.log('Error inserting encounter: ', error);
+            });
+
+        return from(insertPromise);
+    }
+
+    public retrieveCombatants(encounterId: number): Observable<Combatant[]> {
+        const retrievePromise = this._database.all(`SELECT * FROM combatants WHERE encounterId = ${encounterId}`).then(rows => {
+            let combatants = [];
+
+            for (var row in rows) {
+                combatants.push(
+                    new Combatant(
+                        +rows[row][0],
+                        +rows[row][1],
+                        rows[row][2],
+                        rows[row][3] as boolean,
+                        +rows[row][4],
+                        rows[row][5] as boolean,
+                        +rows[row][6],
+                        +rows[row][7],
+                    ));
+            }
+
+            combatants.sort((a: Combatant, b: Combatant) => {
+                return b.initiative - a.initiative;
+            });
+
+            return combatants;
+        }, error => {
+            console.log(`Error retrieving combatants for encounter ${encounterId}: `, error);
+        });
+
+        return from(retrievePromise);
+    }
+
+    public retrieveCombatant(combatantId: number): Observable<Combatant> {
+        const retrievePromise = this._database.all(`SELECT * FROM combatants WHERE id = ${combatantId}`).then(rows => {
+            if (rows.length > 0) {
+                const combatantRow = rows[0];
+
+                return new Combatant(
+                    +combatantRow[0],
+                    +combatantRow[1],
+                    combatantRow[2],
+                    combatantRow[3] as boolean,
+                    +combatantRow[4],
+                    combatantRow[5] as boolean,
+                    +combatantRow[6],
+                    +combatantRow[7],
+                );
+            } else {
+                return null;
+            }
+        }, error => {
+            console.log(`Error retrieving combatant ${combatantId}: `, error);
+        });
+
+        return from(retrievePromise);
+    }
+
+    public insertCombatant(combatant: Combatant): Observable<number> {
+        const insertPromise = this._database.execSQL(
+            'INSERT INTO combatants (encounterId, name, isActive, initiative, tracksHitPoints, maximumHitPoints, currentHitPoints) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [combatant.encounterId, combatant.name, combatant.isActive, combatant.initiative, combatant.tracksHitPoints, combatant.maximumHitPoints, combatant.currentHitPoints])
+            .then(id => {
+                return id;
+            }, error => {
+                console.log('Error inserting combatant: ', error);
             });
 
         return from(insertPromise);

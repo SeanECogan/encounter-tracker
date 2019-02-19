@@ -12,7 +12,7 @@ import { Encounter } from '~/shared/models/encounter.model';
 export class AddEncounterComponent implements OnInit {
 	constructor(
 		private _database: DatabaseService,
-		private _routerExtensions: RouterExtensions) { 
+		private _routerExtensions: RouterExtensions) {
 		this._database.initializeDatabase();
 	}
 
@@ -33,17 +33,17 @@ export class AddEncounterComponent implements OnInit {
 			return false;
 		}
 	}
-	
-    public addEncounter() {
-		if (!this.encounterName || 
+
+	public addEncounter() {
+		if (!this.encounterName ||
 			this.encounterName.trim() === '') {
-				let options = {
-					title: "Your encounter needs a name!",
-					message: "Please enter a name for your encounter.",
-					okButtonText: "OK"
-				};
-				
-				alert(options);
+			let options = {
+				title: "Your encounter needs a name!",
+				message: "Please enter a name for your encounter.",
+				okButtonText: "OK"
+			};
+
+			alert(options);
 		} else {
 			this._database.insertEncounter(new Encounter(
 				0,
@@ -52,5 +52,5 @@ export class AddEncounterComponent implements OnInit {
 				new Date()))
 				.subscribe(encounterId => this.returnToEncounters());
 		}
-    }
+	}
 }
