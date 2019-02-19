@@ -3,6 +3,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { DatabaseService } from "../database/sqlite.service";
 import { AddEncounterComponent } from "./add-encounter/add-encounter.component";
+import { EncounterComponent } from "./encounter/encounter.component";
 import { EncountersComponent } from "./encounters.component";
 
 @NgModule({
@@ -12,7 +13,8 @@ import { EncountersComponent } from "./encounters.component";
     ],
     declarations: [
         EncountersComponent,
-        AddEncounterComponent
+        AddEncounterComponent,
+        EncounterComponent
     ],
     providers: [        
         DatabaseService

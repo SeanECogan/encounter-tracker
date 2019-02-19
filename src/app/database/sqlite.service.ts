@@ -1,30 +1,40 @@
-import { Injectable } from "@angular/core";
-import { Encounter } from "~/shared/models/encounter.model";
-import { Observable, from } from "rxjs";
-var Sqlite = require("nativescript-sqlite");
+import { Injectable } from '@angular/core';
+import { Encounter } from '~/shared/models/encounter.model';
+import { Observable, from } from 'rxjs';
+var Sqlite = require('nativescript-sqlite');
 
 @Injectable()
 export class DatabaseService {
     public initializeDatabase(): Observable<void> {
-        var initializePromise = (new Sqlite("encounter-tracker")).then(db => {
-            db.execSQL("CREATE TABLE IF NOT EXISTS encounters (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, created DATETIME, modified DATETIME)").then(id => {
-                this._database = db;
-            }, error => {
-                console.log("Error creating encounters tables: ", error);
-            });
+        var initializePromise = (new Sqlite('encounter-tracker')).then(db => {
+            this._database = db;
+
+            this._database.execSQL('CREATE TABLE IF NOT EXISTS encounters (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT NOT NULL, created DATETIME NOT NULL, modified DATETIME NOT NULL)').then(
+                id => { },
+                error => {
+                    console.log('Error creating encounters tables: ', error);
+                }
+            );
+
+            this._database.execSQL('CREATE TABLE IF NOT EXISTS combatants (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, encounterId INTEGER NOT NULL, name TEXT NOT NULL, isActive BOOLEAN NOT NULL, initiative INTEGER NOT NULL, tracksHitPoints BOOLEAN NOT NULL, maximumHitPoints INTEGER, currentHitPoints INTEGER, FOREIGN KEY (encounterId) REFERENCES encounters(id))').then(
+                id => { },
+                error => {
+                    console.log('Error creating combatants tables: ', error);
+                }
+            );
         }, error => {
-            console.log("Error opening database connection: ", error);
+            console.log('Error opening database connection: ', error);
         });
 
         return from(initializePromise);
     }
 
     public deleteDatabase(): void {
-        Sqlite.deleteDatabase("encounter-tracker");
+        Sqlite.deleteDatabase('encounter-tracker');
     }
 
     public retrieveEncounters(): Observable<Encounter[]> {
-        const retrievePromise = this._database.all("SELECT * FROM encounters").then(rows => {
+        const retrievePromise = this._database.all('SELECT * FROM encounters').then(rows => {
             let encounters = [];
 
             for (var row in rows) {
@@ -43,7 +53,28 @@ export class DatabaseService {
 
             return encounters;
         }, error => {
-            console.log("Error retrieving all encounters: ", error);
+            console.log('Error retrieving all encounters: ', error);
+        });
+
+        return from(retrievePromise);
+    }
+
+    public retrieveEncounter(encounterId: number): Observable<Encounter> {
+        const retrievePromise = this._database.all(`SELECT * FROM encounters WHERE id = ${encounterId}`).then(rows => {
+            if (rows.length > 0) {
+                const encounterRow = rows[0];
+
+                return new Encounter(
+                    +encounterRow[0],
+                    encounterRow[1],
+                    new Date(encounterRow[2]),
+                    new Date(encounterRow[3])
+                );
+            } else {
+                return null;
+            }
+        }, error => {
+            console.log(`Error retrieving encounter ${encounterId}: `, error);
         });
 
         return from(retrievePromise);
@@ -51,12 +82,12 @@ export class DatabaseService {
 
     public insertEncounter(encounter: Encounter): Observable<number> {
         const insertPromise = this._database.execSQL(
-            "INSERT INTO encounters (name, created, modified) VALUES (?, ?, ?)",
+            'INSERT INTO encounters (name, created, modified) VALUES (?, ?, ?)',
             [encounter.name, encounter.created, encounter.modified])
             .then(id => {
                 return id;
             }, error => {
-                console.log("Error inserting encounter: ", error);
+                console.log('Error inserting encounter: ', error);
             });
 
         return from(insertPromise);

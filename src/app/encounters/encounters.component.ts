@@ -31,6 +31,10 @@ export class EncountersComponent implements OnInit {
         this._routerExtensions.navigate([ 'add-encounter' ]);
     }
 
+    public navigateToEncounter(encounterId: number) {
+        this._routerExtensions.navigate([ 'encounter', encounterId.toString() ])
+    }
+
     public refresh() {
         this._database.retrieveEncounters()
             .subscribe(encounters => this.encounters = encounters);
