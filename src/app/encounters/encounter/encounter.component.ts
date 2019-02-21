@@ -57,20 +57,12 @@ export class EncounterComponent implements OnInit {
 			.subscribe(combatants => this.combatants = combatants);
 	}
 
-	public addCombatant(): void {
-		const numberOfCombatants = this.combatants.length;
+	public navigateToAddCombatant(): void {
+		this._routerExtensions.navigate([ 'encounter', this._encounterId.toString(), 'add-combatant' ]);
+	}
 
-		this._database.insertCombatant(new Combatant(
-			0,
-			this._encounterId,
-			`Combatant ${numberOfCombatants + 1}`,
-			true,
-			Math.ceil(Math.random() * 20),
-			true,
-			20,
-			20
-		))
-		.subscribe(combatantId => this.refresh());
+	public navigateToEditCombatant(): void {
+		console.log('navigating to edit combatant');
 	}
 
 	public encounter: Encounter;

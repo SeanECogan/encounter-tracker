@@ -10,8 +10,6 @@ import { EventData, Page } from "tns-core-modules/ui/page/page";
     templateUrl: "./encounters.component.html"
 })
 export class EncountersComponent implements OnInit {
-    public encounters: Array<Encounter>;
-
     public constructor(
         private _database: DatabaseService,
         private _routerExtensions: RouterExtensions,
@@ -27,12 +25,14 @@ export class EncountersComponent implements OnInit {
         });
     }
 
+    public encounters: Array<Encounter>;
+
     public navigateToAddEncounter() {
         this._routerExtensions.navigate([ 'add-encounter' ]);
     }
 
     public navigateToEncounter(encounterId: number) {
-        this._routerExtensions.navigate([ 'encounter', encounterId.toString() ])
+        this._routerExtensions.navigate([ 'encounter', encounterId.toString() ]);
     }
 
     public refresh() {

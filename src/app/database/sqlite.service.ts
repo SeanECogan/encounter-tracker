@@ -94,6 +94,19 @@ export class DatabaseService {
         return from(insertPromise);
     }
 
+    public updateEncounter(encounter: Encounter): Observable<number> {
+        const updatePromise = this._database.execSQL(
+            'UPDATE encounters SET name = ?, modified = ? WHERE id = ?',
+            [encounter.name, encounter.modified, encounter.id])
+            .then(success => {
+                return success;
+            }, error => {
+                console.log('Error inserting encounter ', encounter.id, ': ', error);
+            });
+
+        return from(updatePromise);
+    }
+
     public retrieveCombatants(encounterId: number): Observable<Combatant[]> {
         const retrievePromise = this._database.all(`SELECT * FROM combatants WHERE encounterId = ${encounterId}`).then(rows => {
             let combatants = [];

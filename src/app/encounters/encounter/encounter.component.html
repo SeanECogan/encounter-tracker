@@ -11,7 +11,7 @@
         <Button 
             dock="right"
             text="Add Combatant" 
-            (tap)="addCombatant()" ></Button>
+            (tap)="navigateToAddCombatant()"></Button>
     </DockLayout>
     <ListView
         *ngIf="combatants && combatants.length > 0" 

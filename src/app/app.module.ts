@@ -4,6 +4,7 @@ import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { EncountersModule } from "./encounters/encounters.module";
+import { CombatantsModule } from "./combatants/combatants.module";
 
 @NgModule({
     bootstrap: [
@@ -13,7 +14,8 @@ import { EncountersModule } from "./encounters/encounters.module";
         NativeScriptModule,
         NativeScriptRouterModule,
         AppRoutingModule,
-        EncountersModule
+        EncountersModule,
+        CombatantsModule
     ],
     declarations: [
         AppComponent
