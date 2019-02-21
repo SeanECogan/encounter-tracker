@@ -26,6 +26,7 @@ export class AddCombatantComponent implements OnInit {
 	ngOnInit() { }
 
 	public combatantName: string;
+	public combatantInitiative: string;
 
 	public retrieveEncounter(): void {
 		this._database.retrieveEncounter(this._encounterId)
@@ -38,10 +39,26 @@ export class AddCombatantComponent implements OnInit {
 
 	public formIsValid(): boolean {
 		if (this.combatantName) {
-			return this.combatantName.trim() !== '';
+			if(this.combatantName.trim() === '') {
+				return false;
+			}
 		} else {
 			return false;
 		}
+
+		if (this.combatantInitiative) {
+			if(this.combatantInitiative.trim() === '') {
+				return false;
+			}
+
+			if(isNaN(parseInt(this.combatantInitiative.trim()))) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+
+		return true;
 	}
 
 	public addCombatant(): void {
@@ -54,13 +71,23 @@ export class AddCombatantComponent implements OnInit {
 			};
 
 			alert(options);
+		} else if (!this.combatantInitiative ||
+				this.combatantInitiative.trim() === '' ||
+				isNaN(parseInt(this.combatantInitiative.trim()))) {
+			let options = {
+				title: "You need a valid number for your combatant's initiative!",
+				message: "Please enter an integer value for your combatant's initiative.",
+				okButtonText: "OK"
+			};
+
+			alert(options);
 		} else {
 			this._database.insertCombatant(new Combatant(
 				0,
 				this._encounterId,
 				this.combatantName,
 				true,
-				Math.ceil(Math.random() * 20),
+				+this.combatantInitiative,
 				true,
 				20,
 				20
