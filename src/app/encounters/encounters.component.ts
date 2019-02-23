@@ -3,6 +3,7 @@ import { Encounter } from "~/shared/models/encounter.model";
 import { DatabaseService } from "../database/sqlite.service";
 import { RouterExtensions } from "nativescript-angular/router";
 import { EventData, Page } from "tns-core-modules/ui/page/page";
+import { GestureEventData } from "tns-core-modules/ui/gestures/gestures";
 
 @Component({
     selector: "Encounters",
@@ -31,8 +32,10 @@ export class EncountersComponent implements OnInit {
         this._routerExtensions.navigate([ 'add-encounter' ]);
     }
 
-    public navigateToEncounter(encounterId: number) {
+    public navigateToEncounter(args: GestureEventData, encounterId: number) {
+        args.object.set('backgroundColor', '#E8E8E8');
         this._routerExtensions.navigate([ 'encounter', encounterId.toString() ]);
+		setTimeout(() => args.object.set('backgroundColor', '#FFFFFF'), 100);
     }
 
     public refresh() {

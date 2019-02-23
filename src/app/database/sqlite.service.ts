@@ -112,17 +112,16 @@ export class DatabaseService {
             let combatants = [];
 
             for (var row in rows) {
-                combatants.push(
-                    new Combatant(
-                        +rows[row][0],
-                        +rows[row][1],
-                        rows[row][2],
-                        rows[row][3] as boolean,
-                        +rows[row][4],
-                        rows[row][5] as boolean,
-                        +rows[row][6],
-                        +rows[row][7],
-                    ));
+                combatants.push(new Combatant(
+                    +rows[row][0],
+                    +rows[row][1],
+                    rows[row][2],
+                    rows[row][3] === 'true',
+                    +rows[row][4],
+                    rows[row][5] === 'true',
+                    +rows[row][6],
+                    +rows[row][7],
+                ));
             }
 
             combatants.sort((a: Combatant, b: Combatant) => {

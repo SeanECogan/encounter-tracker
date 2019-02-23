@@ -18,6 +18,7 @@ export class AddCombatantComponent implements OnInit {
 		private _routerExtensions: RouterExtensions,
 		private _route: ActivatedRoute) {
 		this._encounterId = this._route.snapshot.params.encounterId;
+		this.combatantTracksHitPoints = false;
 
 		this._database.initializeDatabase()
 		.subscribe(() => this.retrieveEncounter());
@@ -27,6 +28,8 @@ export class AddCombatantComponent implements OnInit {
 
 	public combatantName: string;
 	public combatantInitiative: string;
+	public combatantTracksHitPoints: boolean;
+	public combatantMaximumHitPoints: string;
 
 	public retrieveEncounter(): void {
 		this._database.retrieveEncounter(this._encounterId)
@@ -58,6 +61,24 @@ export class AddCombatantComponent implements OnInit {
 			return false;
 		}
 
+		if (this.combatantTracksHitPoints) {
+			if (this.combatantMaximumHitPoints) {
+				if(this.combatantMaximumHitPoints.trim() === '') {
+					return false;
+				}
+	
+				if(isNaN(parseInt(this.combatantMaximumHitPoints.trim()))) {
+					return false;
+				}
+
+				if (parseInt(this.combatantMaximumHitPoints) < 1) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -81,16 +102,28 @@ export class AddCombatantComponent implements OnInit {
 			};
 
 			alert(options);
+		} else if (this.combatantTracksHitPoints && 
+				   (!this.combatantMaximumHitPoints ||
+					this.combatantMaximumHitPoints.trim() === '' ||
+					isNaN(parseInt(this.combatantMaximumHitPoints.trim())) ||
+					parseInt(this.combatantMaximumHitPoints) < 1)) {
+			let options = {
+				title: "Your combatant needs some hit points to track.",
+				message: "Please enter a positive integer value for your combatant's maximum hit points.",
+				okButtonText: "OK"
+			};
+
+			alert(options);
 		} else {
 			this._database.insertCombatant(new Combatant(
 				0,
 				this._encounterId,
 				this.combatantName,
 				true,
-				+this.combatantInitiative,
-				true,
-				20,
-				20
+				Math.floor(+this.combatantInitiative),
+				this.combatantTracksHitPoints,
+				this.combatantTracksHitPoints ? Math.floor(+this.combatantMaximumHitPoints) : null,
+				this.combatantTracksHitPoints ? Math.floor(+this.combatantMaximumHitPoints) : null
 			))
 			.subscribe(combatantId => {
 				this._database.updateEncounter(new Encounter(

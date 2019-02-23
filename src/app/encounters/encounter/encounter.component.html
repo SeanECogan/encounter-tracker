@@ -25,14 +25,25 @@
                 borderColor="gray"
                 padding="10"
                 paddingLeft="17"
-                (tap)="navigateToEditCombatant(combatant.id)">
+                (tap)="navigateToEditCombatant($event, combatant.id)">
                 <Label 
                     fontSize="18" 
                     fontWeight="bold"
                     [text]="combatant.name"></Label>
-                <Label 
-                    fontSize="14" 
-                    text="{{ 'Initiative: '+combatant.initiative }}"></Label>     
+                <DockLayout
+                    marginTop="10"
+                    marginRight="5">
+                    <Label 
+                        dock="left"
+                        fontSize="18" 
+                        text="{{ 'Initiative: '+combatant.initiative }}"></Label>  
+                    <Label 
+                        *ngIf="combatant.tracksHitPoints"
+                        dock="right"
+                        fontSize="18" 
+                        textAlignment="right"
+                        text="{{ 'Hit Points: '+combatant.currentHitPoints+' / '+combatant.maximumHitPoints }}"></Label>  
+                </DockLayout>   
             </StackLayout>
         </ng-template>
     </ListView>

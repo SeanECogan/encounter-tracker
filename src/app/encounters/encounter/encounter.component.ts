@@ -5,6 +5,7 @@ import { Encounter } from '~/shared/models/encounter.model';
 import { ActivatedRoute } from '@angular/router';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { Combatant } from '~/shared/models/combatant.model';
+import { GestureEventData } from 'tns-core-modules/ui/gestures/gestures';
 
 @Component({
 	moduleId: module.id,
@@ -61,8 +62,10 @@ export class EncounterComponent implements OnInit {
 		this._routerExtensions.navigate([ 'encounter', this._encounterId.toString(), 'add-combatant' ]);
 	}
 
-	public navigateToEditCombatant(): void {
-		console.log('navigating to edit combatant');
+	public navigateToEditCombatant(args: GestureEventData, combatantId: number): void {
+		args.object.set('backgroundColor', '#E8E8E8');
+		console.log('navigating to edit combatant ', combatantId);
+		setTimeout(() => args.object.set('backgroundColor', '#FFFFFF'), 100);
 	}
 
 	public encounter: Encounter;
