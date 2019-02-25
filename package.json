@@ -8,7 +8,7 @@
             "version": "5.1.0"
         }
     },
-    "description": "NativeScript Application",
+    "description": "Encounter Tracker",
     "license": "SEE LICENSE IN <your-license-filename>",
     "repository": "<fill-your-repository-here>",
     "dependencies": {
