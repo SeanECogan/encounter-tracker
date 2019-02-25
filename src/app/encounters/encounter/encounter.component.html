@@ -20,6 +20,7 @@
         borderColor="gray">
         <ng-template let-combatant="item">
             <StackLayout
+                [ngClass]="{ 'inactive': !combatant.isActive }"
                 marginTop="10"
                 borderBottomWidth="1"
                 borderColor="gray"
@@ -29,7 +30,7 @@
                 <Label 
                     fontSize="18" 
                     fontWeight="bold"
-                    [text]="combatant.name"></Label>
+                    text="{{combatant.name+(combatant.isActive ? '' : ' (Inactive)')}}"></Label>
                 <DockLayout
                     marginTop="10"
                     marginRight="5">

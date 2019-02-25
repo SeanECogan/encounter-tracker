@@ -3,6 +3,7 @@ import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { DatabaseService } from "../database/sqlite.service";
 import { AddCombatantComponent } from "./add-combatant/add-combatant.component";
+import { EditCombatantComponent } from "./edit-combatant/edit-combatant.component";
 
 @NgModule({
     imports: [
@@ -10,7 +11,8 @@ import { AddCombatantComponent } from "./add-combatant/add-combatant.component";
         NativeScriptCommonModule
     ],
     declarations: [
-        AddCombatantComponent
+        AddCombatantComponent,
+        EditCombatantComponent
     ],
     providers: [        
         DatabaseService

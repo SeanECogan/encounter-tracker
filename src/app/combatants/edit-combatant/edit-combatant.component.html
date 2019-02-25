@@ -1,4 +1,4 @@
-<ActionBar title="Add Combatant">
+<ActionBar title="Edit Combatant">
         <NavigationButton text="Go Back" android.systemIcon="ic_menu_back" (tap)="returnToEncounter()"></NavigationButton>
     </ActionBar>
     <StackLayout>
@@ -30,24 +30,10 @@
             keyboardType="number"
             autocorrect="true"
             marginLeft="10"
-            marginRight="10"></TextField>
-        <DockLayout
-            class="input input-border"
-            marginLeft="15"
-            marginRight="10"
-            marginTop="10">
-            <Label
-                text="Track Hit Points?"
-                dock="left"
-                fontSize="18"
-                fontWeight="bold"></Label>
-            <Switch
-                [(ngModel)]="combatantTracksHitPoints"
-                dock="right"></Switch>
-        </DockLayout>        
+            marginRight="10"></TextField>               
         <Label
             *ngIf="combatantTracksHitPoints"
-            text="Maximum Hit Points"
+            text="Current Hit Points"
             fontSize="18"
             fontWeight="bold"
             marginLeft="13"
@@ -56,16 +42,31 @@
         <TextField 
             *ngIf="combatantTracksHitPoints"
             class="input input-border"
-            [(ngModel)]="combatantMaximumHitPoints" 
+            [(ngModel)]="combatantCurrentHitPoints"
             secure="false"
             keyboardType="number"
-            (returnPress)="addCombatant()"
+            (returnPress)="updateCombatant()"
             autocorrect="true"
             marginLeft="10"
             marginRight="10"></TextField>
+        <DockLayout
+            *ngIf="!combatantTracksHitPoints"
+            class="input input-border"
+            marginLeft="15"
+            marginRight="10"
+            marginTop="10">
+            <Label
+                text="Is Active?"
+                dock="left"
+                fontSize="18"
+                fontWeight="bold"></Label>
+            <Switch
+                [(ngModel)]="combatantIsActive"
+                dock="right"></Switch>
+        </DockLayout>
         <Button
-            text="Add" 
-            (tap)="addCombatant()" 
+            text="Edit" 
+            (tap)="updateCombatant()" 
             isEnabled="{{ formIsValid() }}"
             horizontalAlignment="right"
             marginRight="10"

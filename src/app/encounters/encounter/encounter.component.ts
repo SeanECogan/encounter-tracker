@@ -63,9 +63,11 @@ export class EncounterComponent implements OnInit {
 	}
 
 	public navigateToEditCombatant(args: GestureEventData, combatantId: number): void {
-		args.object.set('backgroundColor', '#E8E8E8');
-		console.log('navigating to edit combatant ', combatantId);
-		setTimeout(() => args.object.set('backgroundColor', '#FFFFFF'), 100);
+		const previousClass = args.object.get('class');
+
+		args.object.set('class', 'tapped ' + previousClass);
+		this._routerExtensions.navigate([ 'encounter', this._encounterId.toString(), 'edit-combatant', combatantId.toString() ]);
+		setTimeout(() => args.object.set('class', previousClass), 100);
 	}
 
 	public encounter: Encounter;

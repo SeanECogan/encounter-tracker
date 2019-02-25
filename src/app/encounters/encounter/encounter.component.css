@@ -1,3 +1,15 @@
-.encounter {
+.tapped {
+    background-color: #E8E8E8;
+}
 
+.inactive {
+    background-color: #BBBBBB;
+}
+
+.inactive.tapped {
+    background-color: #AAAAAA;
+}
+
+.inactive Label {
+    font-style: italic;
 }

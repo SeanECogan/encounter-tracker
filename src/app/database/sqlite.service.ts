@@ -101,7 +101,7 @@ export class DatabaseService {
             .then(success => {
                 return success;
             }, error => {
-                console.log('Error inserting encounter ', encounter.id, ': ', error);
+                console.log('Error updating encounter ', encounter.id, ': ', error);
             });
 
         return from(updatePromise);
@@ -172,6 +172,19 @@ export class DatabaseService {
             });
 
         return from(insertPromise);
+    }
+
+    public updateCombatant(combatant: Combatant): Observable<number> {
+        const updatePromise = this._database.execSQL(
+            'UPDATE combatants SET name = ?, isActive = ?, initiative = ?, currentHitPoints = ? WHERE id = ?',
+            [combatant.name, combatant.isActive, combatant.initiative, combatant.currentHitPoints, combatant.id])
+            .then(success => {
+                return success;
+            }, error => {
+                console.log('Error updating combatant ', combatant.id, ': ', error);
+            });
+
+        return from(updatePromise);
     }
 
     private _database: any;
